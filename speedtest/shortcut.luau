@@ -1,3 +1,3 @@
 function onClick()
-    noctalia.togglePanel("vinicius/speedtest:panel")
+    noctalia.togglePanel("kinshyyy/speedtest:panel")
 end

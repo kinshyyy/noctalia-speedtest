@@ -6,7 +6,7 @@ O script `speedtest.sh` já vem dentro desta pasta do plugin. O painel e o servi
 
 ## Instalação local
 
-Copie esta pasta para `$XDG_DATA_HOME/noctalia/plugins/speedtest` (ou `~/.local/share/noctalia/plugins/speedtest` quando `XDG_DATA_HOME` não estiver definido). Em seguida, habilite **SpeedTest** em Configurações → Plugins e adicione `vinicius/speedtest:bar` à barra. O atalho do Controle também abre o painel.
+Copie esta pasta para `$XDG_DATA_HOME/noctalia/plugins/speedtest` (ou `~/.local/share/noctalia/plugins/speedtest` quando `XDG_DATA_HOME` não estiver definido). Em seguida, habilite **SpeedTest** em Configurações → Plugins e adicione `kinshyyy/speedtest:bar` à barra. O atalho do Controle também abre o painel.
 
 ## Configuração
 

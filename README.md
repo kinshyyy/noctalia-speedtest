@@ -20,20 +20,20 @@ Faça testes de velocidade sem sair do Noctalia. O painel mostra download, uploa
 Requer Noctalia **v5.4.0 ou mais recente**. Adicione a fonte Git e habilite o plugin:
 
 ```sh
-noctalia msg plugins source add vinicius-speedtest git https://github.com/kinshyyy/noctalia-speedtest.git
-noctalia msg plugins enable vinicius/speedtest
+noctalia msg plugins source add kinshyyy-speedtest git https://github.com/kinshyyy/noctalia-speedtest.git
+noctalia msg plugins enable kinshyyy/speedtest
 ```
 
-Depois, adicione `vinicius/speedtest:bar` à barra. Você também pode abrir o painel pelo atalho no Controle ou com:
+Depois, adicione `kinshyyy/speedtest:bar` à barra. Você também pode abrir o painel pelo atalho no Controle ou com:
 
 ```sh
-noctalia msg panel-toggle vinicius/speedtest:panel
+noctalia msg panel-toggle kinshyyy/speedtest:panel
 ```
 
 Para receber atualizações do repositório:
 
 ```sh
-noctalia msg plugins update vinicius-speedtest
+noctalia msg plugins update kinshyyy-speedtest
 ```
 
 <h2 align="center">Configurações</h2>
@@ -60,7 +60,7 @@ O histórico fica fora da pasta do plugin, por padrão em `Documentos/SpeedTest`
 
 <h2 align="center">Desenvolvimento</h2>
 
-O código do plugin está em [`speedtest/`](speedtest/). Consulte o [README de desenvolvimento e configuração](speedtest/README.md) para mais detalhes.
+O código do plugin `kinshyyy/speedtest` está em [`speedtest/`](speedtest/). Consulte o [README de desenvolvimento e configuração](speedtest/README.md) para mais detalhes.
 
 <h2 align="center">Licença</h2>
 

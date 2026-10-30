@@ -1,8 +1,8 @@
-id = "vinicius/speedtest"
+id = "kinshyyy/speedtest"
 name = "SpeedTest"
 version = "1.2.1"
 plugin_api = 42
-author = "Vinicius"
+author = "kinshyyy"
 license = "MIT"
 icon = "speedometer"
 description = "Teste a conexão, escolha servidores e consulte o histórico no Noctalia."
