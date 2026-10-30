@@ -1,6 +1,6 @@
 # SpeedTest para Noctalia
 
-Plugin local para Noctalia v5.4.0 ou mais recente, com painel, widget de barra, atalho no Controle e serviço de watch. O painel traz um velocímetro semicircular inspirado no Speedtest da Ookla, com escala progressiva, ponteiro e arco animados durante download e upload, além de teste simples/completo, servidor escolhido, lista de servidores, estatísticas, limpeza de histórico e instalação/remoção do atalho `.desktop`. As últimas métricas ficam disponíveis ao reabrir o painel.
+Plugin local para Noctalia v5.4.0 ou mais recente, com painel, widget de barra, atalho no Controle e serviço de watch. O painel traz um velocímetro semicircular inspirado no Speedtest da Ookla, com escala progressiva, ponteiro e arco animados durante download e upload, além de teste simples/completo, servidor escolhido, lista de servidores, estatísticas e limpeza de histórico. As últimas métricas ficam disponíveis ao reabrir o painel.
 
 O script `speedtest.sh` já vem dentro desta pasta do plugin. O painel e o serviço localizam o arquivo pela pasta real do plugin, sem depender de `/home/vinicius` ou do local onde o pacote foi extraído. O `speedtest-go` é instalado pelo script quando não há um motor compatível no sistema, então não é uma dependência obrigatória para carregar o plugin.
 

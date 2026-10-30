@@ -13,7 +13,7 @@ Faça testes de velocidade sem sair do Noctalia. O painel mostra download, uploa
 - Histórico de resultados, estatísticas e limpeza de registros antigos.
 - Modo watch para executar testes automaticamente no intervalo escolhido.
 - Widget na barra com ícone configurável, rótulo ocultável e resumo temporário dos resultados.
-- Atalho no Controle do Noctalia e opção para instalar ou remover um atalho `.desktop`.
+- Atalho no Controle do Noctalia para abrir o painel.
 
 <h2 align="center">Instalação</h2>
 

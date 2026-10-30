@@ -271,10 +271,6 @@ local function startAction(action, label, useConfig)
         table.insert(argv, "--stats")
     elseif action == "clean" then
         table.insert(argv, "--clean")
-    elseif action == "install" then
-        table.insert(argv, "--install-desktop")
-    elseif action == "uninstall" then
-        table.insert(argv, "--uninstall-desktop")
     end
 
     local accepted = noctalia.runAsync(argv, function(result)
@@ -366,11 +362,6 @@ function renderPanel()
         ui.button({ text = "Estatísticas", glyph = "chart-bar", variant = "ghost", flexGrow = 1, enabled = not running, onClick = function() startAction("stats", "Estatísticas", true) end }),
         ui.button({ text = "Limpar", glyph = "trash", variant = "ghost", flexGrow = 1, enabled = not running, onClick = function() startAction("clean", "Limpeza", true) end }),
     }))
-    table.insert(children, ui.row({ gap = 8 }, {
-        ui.button({ text = "Instalar .desktop", glyph = "app-window", variant = "ghost", flexGrow = 1, enabled = not running, onClick = function() startAction("install", "Instalação do atalho", false) end }),
-        ui.button({ text = "Remover atalho", glyph = "x", variant = "ghost", flexGrow = 1, enabled = not running, onClick = function() startAction("uninstall", "Remoção do atalho", false) end }),
-    }))
-
     if showOutput and outputText ~= "" then
         table.insert(children, ui.separator({ spacing = 3 }))
         table.insert(children, ui.scroll({ height = 116, gap = 4, padding = 8, fill = "surface_container_high", radius = 10 }, {
