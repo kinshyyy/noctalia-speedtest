@@ -422,7 +422,7 @@ function renderPanel()
                 ui.image({ path = gaugePaths.upload, width = 320, height = 224, fit = "contain" }),
             }))
         end
-        table.insert(children, ui.row({ justify = "center", align = "center", paddingV = 2 }, {
+        table.insert(children, 3, ui.row({ justify = "center", align = "center", paddingV = 2 }, {
             ui.column({ align = "center", paddingH = 16, paddingV = 8, fill = "surface_container_high", radius = 10 }, {
                 ui.label({ text = "Qualidade da conexão: " .. metrics.quality, fontSize = 12, color = "on_surface_variant", textAlign = "center" }),
             }),
