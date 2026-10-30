@@ -12,7 +12,7 @@ Faça testes de velocidade sem sair do Noctalia. O painel mostra download, uploa
 - Velocímetro animado para download e upload, além de download, upload, ping e qualidade da conexão.
 - Histórico de resultados, estatísticas e limpeza de registros antigos.
 - Modo watch para executar testes automaticamente no intervalo escolhido.
-- Widget na barra com ícone configurável e opção para ocultar o rótulo.
+- Widget na barra com ícone configurável, rótulo ocultável e resumo temporário dos resultados.
 - Atalho no Controle do Noctalia e opção para instalar ou remover um atalho `.desktop`.
 
 <h2 align="center">Instalação</h2>
@@ -48,6 +48,8 @@ Em **Configurações → Plugins → SpeedTest**, você pode ajustar:
 | Intervalo do watch | Define a frequência dos testes automáticos, em minutos. |
 | Ícone da barra | Escolhe o ícone do widget. |
 | Mostrar rótulo | Exibe ou oculta o texto ao lado do ícone. |
+| Mostrar resultado temporário | Exibe download e upload na barra ao concluir um teste. |
+| Duração do resultado | Define por quantos segundos o resumo fica na barra (1–120 s). |
 
 <h2 align="center">Motor de teste</h2>
 

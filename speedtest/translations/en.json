@@ -12,5 +12,9 @@
   "settings.widget.glyph.label": "Bar icon",
   "settings.widget.glyph.description": "Choose the icon shown by the SpeedTest bar widget.",
   "settings.widget.show_label.label": "Show bar label",
-  "settings.widget.show_label.description": "Show or hide the SpeedTest text beside the icon."
+  "settings.widget.show_label.description": "Show or hide the SpeedTest text beside the icon.",
+  "settings.widget.show_result.label": "Show temporary result in bar",
+  "settings.widget.show_result.description": "Show download and upload after each test, then return to the normal label.",
+  "settings.widget.result_duration.label": "Bar result duration (seconds)",
+  "settings.widget.result_duration.description": "How long the test summary stays visible before it disappears."
 }

@@ -12,5 +12,9 @@
   "settings.widget.glyph.label": "Ícone da barra",
   "settings.widget.glyph.description": "Escolha o ícone mostrado pelo widget SpeedTest na barra.",
   "settings.widget.show_label.label": "Mostrar rótulo na barra",
-  "settings.widget.show_label.description": "Mostra ou oculta o texto SpeedTest ao lado do ícone."
+  "settings.widget.show_label.description": "Mostra ou oculta o texto SpeedTest ao lado do ícone.",
+  "settings.widget.show_result.label": "Mostrar resultado temporário na barra",
+  "settings.widget.show_result.description": "Exibe download e upload após cada teste e depois volta ao rótulo normal.",
+  "settings.widget.result_duration.label": "Duração do resultado na barra (segundos)",
+  "settings.widget.result_duration.description": "Tempo que o resumo do teste permanece visível antes de desaparecer."
 }

@@ -1,6 +1,6 @@
 id = "vinicius/speedtest"
 name = "SpeedTest"
-version = "1.0.0"
+version = "1.1.0"
 plugin_api = 42
 author = "Vinicius"
 license = "MIT"
@@ -59,6 +59,22 @@ type = "bool"
 label_key = "settings.widget.show_label.label"
 description_key = "settings.widget.show_label.description"
 default = true
+
+[[setting]]
+key = "show_result_on_bar"
+type = "bool"
+label_key = "settings.widget.show_result.label"
+description_key = "settings.widget.show_result.description"
+default = true
+
+[[setting]]
+key = "result_duration"
+type = "int"
+label_key = "settings.widget.result_duration.label"
+description_key = "settings.widget.result_duration.description"
+default = 10
+min = 1
+max = 120
 
 [[widget]]
 id = "bar"

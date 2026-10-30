@@ -45,6 +45,7 @@ local function runWatchTest()
         local download, upload, latency, quality = string.match(output, "SPEEDTEST_RESULT|([^|\n]+)|([^|\n]+)|([^|\n]+)|([^|\n]+)")
         if download then
             noctalia.state.set("last_metrics", { download = download, upload = upload, latency = latency, quality = quality })
+            noctalia.state.set("last_metrics_at", noctalia.nowMs())
         end
         local status = result.exitCode == 0 and "Teste automático concluído." or ("Teste automático falhou (código " .. tostring(result.exitCode) .. ").")
         if result.timedOut then status = "O teste automático excedeu o tempo limite." end

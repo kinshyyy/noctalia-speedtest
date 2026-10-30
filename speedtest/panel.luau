@@ -194,6 +194,7 @@ local function startTestStream(action, label)
                 panel.setNeedsFrameTick(false)
                 createGauge(metrics.download)
                 noctalia.state.set("last_metrics", metrics)
+                noctalia.state.set("last_metrics_at", noctalia.nowMs())
                 renderPanel()
             end
         end
@@ -281,6 +282,7 @@ local function startAction(action, label, useConfig)
             if parsed then
                 metrics = parsed
                 noctalia.state.set("last_metrics", metrics)
+                noctalia.state.set("last_metrics_at", noctalia.nowMs())
                 createGauge(metrics.download)
             else
                 statusText = "Teste terminou, mas não retornou as métricas esperadas"
