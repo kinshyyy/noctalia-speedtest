@@ -424,12 +424,14 @@ function renderPanel()
                 ui.image({ path = gaugePaths.upload, width = 320, height = 224, fit = "contain" }),
             }))
         end
-        table.insert(children, ui.label({ text = "Qualidade da conexão: " .. metrics.quality, fontSize = 12, color = "on_surface_variant", textAlign = "center" }))
+        table.insert(children, ui.row({ justify = "space_between", align = "center", paddingH = 70, paddingV = 2 }, {
+            ui.label({ text = "Qualidade da conexão: " .. metrics.quality, fontSize = 12, color = "on_surface_variant" }),
+            ui.label({ text = watchLabel, fontSize = 11, color = watchEnabled and "primary" or "on_surface_variant", textAlign = "end" }),
+        }))
         table.insert(children, ui.row({ gap = 8, paddingH = 70, paddingV = 2 }, {
             ui.button({ text = "Testar", glyph = "player-play", variant = "primary", flexGrow = 1, enabled = not running, onClick = function() startAction("test", "Teste", true) end }),
             ui.button({ text = "Completo", glyph = "list-details", variant = "secondary", flexGrow = 1, enabled = not running, onClick = function() startAction("test-full", "Teste completo", true) end }),
         }))
-        table.insert(children, ui.label({ text = watchLabel, fontSize = 11, color = watchEnabled and "primary" or "on_surface_variant", textAlign = "center" }))
         if showOutput and outputText ~= "" then
             table.insert(children, ui.separator({ spacing = 3 }))
             table.insert(children, ui.scroll({ height = 116, gap = 4, padding = 8, fill = "surface_container_high", radius = 10 }, {
