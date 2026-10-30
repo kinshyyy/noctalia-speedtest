@@ -422,8 +422,10 @@ function renderPanel()
                 ui.image({ path = gaugePaths.upload, width = 320, height = 224, fit = "contain" }),
             }))
         end
-        table.insert(children, ui.row({ align = "center", paddingH = 70, paddingV = 2 }, {
-            ui.label({ text = "Qualidade da conexão: " .. metrics.quality, fontSize = 12, color = "on_surface_variant" }),
+        table.insert(children, ui.row({ justify = "center", align = "center", paddingV = 2 }, {
+            ui.column({ align = "center", paddingH = 16, paddingV = 8, fill = "surface_container_high", radius = 10 }, {
+                ui.label({ text = "Qualidade da conexão: " .. metrics.quality, fontSize = 12, color = "on_surface_variant", textAlign = "center" }),
+            }),
         }))
         table.insert(children, ui.row({ gap = 8, paddingH = 70, paddingV = 2 }, {
             ui.button({ text = "Testar", glyph = "player-play", variant = "primary", flexGrow = 1, enabled = not running, onClick = function() startAction("test", "Teste", true) end }),
