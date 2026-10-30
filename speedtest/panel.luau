@@ -13,6 +13,7 @@ local gaugePaths = { download = nil, upload = nil }
 local gaugeSequence = 0
 local gaugeFiles = {}
 local animationStage = nil
+local pendingAnimationStage = nil
 local animationElapsed = 0
 local animationFrameElapsed = 0
 local metrics = { download = "--", upload = "--", latency = "--", quality = "—" }
@@ -175,6 +176,7 @@ local function startTestStream(action, label)
     if running or noctalia.state.get("running") == true then return end
     running = true
     animationStage = "download"
+    pendingAnimationStage = nil
     animationElapsed = 0
     animationFrameElapsed = 0
     statusText = "Medindo download…"
@@ -201,9 +203,14 @@ local function startTestStream(action, label)
         line = cleanOutput(line)
         local phase = string.match(line, "SPEEDTEST_PHASE|([^|]+)")
         if phase then
-            animationStage = phase
-            animationElapsed = 0
-            statusText = phase == "upload" and "Medindo upload…" or "Medindo download…"
+            if phase == "upload" and animationStage == "download" and animationElapsed < 1200 then
+                pendingAnimationStage = phase
+            else
+                animationStage = phase
+                pendingAnimationStage = nil
+                animationElapsed = 0
+            end
+            statusText = animationStage == "upload" and "Medindo upload…" or "Medindo download…"
             renderPanel()
             return
         end
@@ -214,6 +221,7 @@ local function startTestStream(action, label)
                 gotResult = true
                 metrics = parsed
                 animationStage = nil
+                pendingAnimationStage = nil
                 panel.setNeedsFrameTick(false)
                 createGauges()
                 noctalia.state.set("last_metrics", metrics)
@@ -225,6 +233,7 @@ local function startTestStream(action, label)
         if exitCode ~= nil then
             running = false
             animationStage = nil
+            pendingAnimationStage = nil
             panel.setNeedsFrameTick(false)
             noctalia.state.set("running", false)
             if exitCode == 0 and gotResult then
@@ -249,6 +258,7 @@ local function startTestStream(action, label)
     if not accepted then
         running = false
         animationStage = nil
+        pendingAnimationStage = nil
         panel.setNeedsFrameTick(false)
         noctalia.state.set("running", false)
         statusText = "Não foi possível iniciar o teste"
@@ -451,6 +461,11 @@ function onFrameTick(deltaMs)
     if not animationStage or not running then return end
     animationElapsed += deltaMs
     animationFrameElapsed += deltaMs
+    if pendingAnimationStage and animationElapsed >= 1200 then
+        animationStage = pendingAnimationStage
+        pendingAnimationStage = nil
+        animationElapsed = 0
+    end
     if animationFrameElapsed < 160 then return end
     animationFrameElapsed = 0
     local sweep = 0.5 + math.sin(animationElapsed / 850) * 0.46
