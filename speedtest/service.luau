@@ -12,6 +12,18 @@ local function cleanOutput(text)
     return noctalia.string.trim(text)
 end
 
+local function notifyResult(download, upload, latency)
+    if noctalia.getConfig("notify_result") == false then return end
+    local downValue = tonumber(download)
+    local upValue = tonumber(upload)
+    local pingValue = tonumber(latency)
+    if not downValue or not upValue or not pingValue then return end
+    noctalia.notify(
+        "SpeedTest concluído",
+        string.format("Download: %d Mbps · Upload: %d Mbps · Ping: %d ms", math.floor(downValue + 0.5), math.floor(upValue + 0.5), math.floor(pingValue + 0.5))
+    )
+end
+
 local function watchArgs()
     local args = { "bash", (noctalia.pluginDir() or ".") .. "/speedtest.sh", "--plugin-mode" }
     local server = tostring(noctalia.getConfig("server_id") or "")
@@ -46,6 +58,7 @@ local function runWatchTest()
         if download then
             noctalia.state.set("last_metrics", { download = download, upload = upload, latency = latency, quality = quality })
             noctalia.state.set("last_metrics_at", noctalia.nowMs())
+            if result.exitCode == 0 and not result.timedOut then notifyResult(download, upload, latency) end
         end
         local status = result.exitCode == 0 and "Teste automático concluído." or ("Teste automático falhou (código " .. tostring(result.exitCode) .. ").")
         if result.timedOut then status = "O teste automático excedeu o tempo limite." end

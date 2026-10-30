@@ -50,6 +50,7 @@ Em **Configurações → Plugins → SpeedTest**, você pode ajustar:
 | Mostrar rótulo | Exibe ou oculta o texto ao lado do ícone. |
 | Mostrar resultado temporário | Exibe download e upload na barra ao concluir um teste, mesmo com o rótulo oculto. |
 | Duração do resultado | Define por quantos segundos o resumo fica na barra (1–120 s). |
+| Notificar resultado | Ativa ou desativa a notificação de download, upload e ping ao fim dos testes. |
 
 <h2 align="center">Motor de teste</h2>
 

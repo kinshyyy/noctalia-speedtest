@@ -54,6 +54,18 @@ local function parseResult(text)
     return { download = download, upload = upload, latency = latency, quality = q }
 end
 
+local function notifyResult(value)
+    if noctalia.getConfig("notify_result") == false then return end
+    local download = tonumber(value.download)
+    local upload = tonumber(value.upload)
+    local latency = tonumber(value.latency)
+    if not download or not upload or not latency then return end
+    noctalia.notify(
+        "SpeedTest concluído",
+        string.format("Download: %d Mbps · Upload: %d Mbps · Ping: %d ms", math.floor(download + 0.5), math.floor(upload + 0.5), math.floor(latency + 0.5))
+    )
+end
+
 local gaugeTicks = {
     { speed = 0, ratio = 0.00 },
     { speed = 5, ratio = 0.05 },
@@ -207,6 +219,7 @@ local function startTestStream(action, label)
             if exitCode == 0 and gotResult then
                 statusText = label .. " concluído"
                 createGauge(metrics.download)
+                notifyResult(metrics)
             else
                 statusText = exitCode == 0 and "O teste terminou sem fornecer as métricas." or ("Teste falhou (código " .. tostring(exitCode) .. ")")
             end
@@ -284,6 +297,7 @@ local function startAction(action, label, useConfig)
                 noctalia.state.set("last_metrics", metrics)
                 noctalia.state.set("last_metrics_at", noctalia.nowMs())
                 createGauge(metrics.download)
+                if result.exitCode == 0 and not result.timedOut then notifyResult(metrics) end
             else
                 statusText = "Teste terminou, mas não retornou as métricas esperadas"
             end

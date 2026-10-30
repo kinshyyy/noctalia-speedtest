@@ -16,5 +16,7 @@
   "settings.widget.show_result.label": "Mostrar resultado temporário na barra",
   "settings.widget.show_result.description": "Exibe download e upload após cada teste mesmo com o rótulo normal oculto, depois volta ao estado anterior.",
   "settings.widget.result_duration.label": "Duração do resultado na barra (segundos)",
-  "settings.widget.result_duration.description": "Tempo que o resumo do teste permanece visível antes de desaparecer."
+  "settings.widget.result_duration.description": "Tempo que o resumo do teste permanece visível antes de desaparecer.",
+  "settings.notify_result.label": "Notificar resultado do teste",
+  "settings.notify_result.description": "Mostra uma notificação com download, upload e ping ao concluir testes manuais ou automáticos."
 }

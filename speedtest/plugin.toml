@@ -1,6 +1,6 @@
 id = "vinicius/speedtest"
 name = "SpeedTest"
-version = "1.1.1"
+version = "1.2.0"
 plugin_api = 42
 author = "Vinicius"
 license = "MIT"
@@ -75,6 +75,13 @@ description_key = "settings.widget.result_duration.description"
 default = 10
 min = 1
 max = 120
+
+[[setting]]
+key = "notify_result"
+type = "bool"
+label_key = "settings.notify_result.label"
+description_key = "settings.notify_result.description"
+default = true
 
 [[widget]]
 id = "bar"

@@ -16,5 +16,7 @@
   "settings.widget.show_result.label": "Show temporary result in bar",
   "settings.widget.show_result.description": "Show download and upload after each test even when the normal label is hidden, then return to the previous state.",
   "settings.widget.result_duration.label": "Bar result duration (seconds)",
-  "settings.widget.result_duration.description": "How long the test summary stays visible before it disappears."
+  "settings.widget.result_duration.description": "How long the test summary stays visible before it disappears.",
+  "settings.notify_result.label": "Notify with test results",
+  "settings.notify_result.description": "Show a notification with download, upload, and ping when manual or automatic tests finish."
 }

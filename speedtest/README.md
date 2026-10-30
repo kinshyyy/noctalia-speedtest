@@ -10,6 +10,6 @@ Copie esta pasta para `$XDG_DATA_HOME/noctalia/plugins/speedtest` (ou `~/.local/
 
 ## Configuração
 
-Nas configurações do plugin, você pode definir o ID do servidor, mostrar ou ocultar os dados ISP/IP, ativar o histórico, selecionar a pasta do histórico e configurar o intervalo do modo watch. As opções do widget permitem escolher o ícone, ocultar o rótulo e mostrar o download/upload temporariamente após um teste, com duração configurável de 1 a 120 segundos. As opções de estatísticas e limpeza usam a mesma pasta de histórico configurada.
+Nas configurações do plugin, você pode definir o ID do servidor, mostrar ou ocultar os dados ISP/IP, ativar o histórico, selecionar a pasta do histórico, configurar o intervalo do modo watch e ligar ou desligar as notificações dos resultados. As opções do widget permitem escolher o ícone, ocultar o rótulo e mostrar o download/upload temporariamente após um teste, com duração configurável de 1 a 120 segundos. As opções de estatísticas e limpeza usam a mesma pasta de histórico configurada.
 
 O modo watch roda em segundo plano enquanto estiver ativado e para quando você o desliga ou encerra o Noctalia. O helper incluído preserva o motor e as operações do script original; ele usa `speedtest-go` se estiver instalado e mantém a instalação automática do programa caso não esteja.
