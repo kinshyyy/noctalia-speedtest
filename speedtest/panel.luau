@@ -377,7 +377,7 @@ function renderPanel()
             ui.row({ gap = 2, align = "center" }, {
                 ui.button({ glyph = "chart-bar", variant = "ghost", tooltip = "Mostrar/ocultar estatísticas do histórico", enabled = not running, onClick = toggleHistory }),
                 ui.button({ glyph = "trash", variant = "ghost", tooltip = "Limpar histórico antigo", enabled = not running, onClick = function() startAction("clean", "Limpeza", true) end }),
-                ui.button({ glyph = watchEnabled and "player-stop" or "repeat", variant = "ghost", tooltip = watchEnabled and "Parar watch" or "Iniciar watch", onClick = function()
+                ui.button({ text = watchEnabled and "Watch ligado" or "Iniciar watch", glyph = watchEnabled and "player-stop" or "repeat", variant = watchEnabled and "primary" or "ghost", tooltip = watchEnabled and "Parar watch" or "Iniciar watch", onClick = function()
                     noctalia.state.set("watch_enabled", not watchEnabled)
                     watchEnabled = not watchEnabled
                     renderPanel()
