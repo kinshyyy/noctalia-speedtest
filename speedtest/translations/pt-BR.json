@@ -1,0 +1,16 @@
+{
+  "settings.server_id.label": "ID do servidor",
+  "settings.server_id.description": "ID opcional do servidor Speedtest. Use Listar servidores para consultar os IDs.",
+  "settings.show_provider.label": "Mostrar provedor e IP",
+  "settings.show_provider.description": "Inclui a linha com provedor e IP nos resultados completos.",
+  "settings.save_history.label": "Salvar histórico dos testes",
+  "settings.save_history.description": "Acrescenta os resultados ao log mensal e ao arquivo history.csv.",
+  "settings.history_dir.label": "Pasta do histórico",
+  "settings.history_dir.description": "Pasta opcional. Deixe vazia para usar o padrão Documentos/SpeedTest do script.",
+  "settings.watch_interval.label": "Intervalo do modo watch (minutos)",
+  "settings.watch_interval.description": "Frequência dos testes automáticos em segundo plano.",
+  "settings.widget.glyph.label": "Ícone da barra",
+  "settings.widget.glyph.description": "Escolha o ícone mostrado pelo widget SpeedTest na barra.",
+  "settings.widget.show_label.label": "Mostrar rótulo na barra",
+  "settings.widget.show_label.description": "Mostra ou oculta o texto SpeedTest ao lado do ícone."
+}

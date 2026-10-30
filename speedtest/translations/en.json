@@ -1,0 +1,16 @@
+{
+  "settings.server_id.label": "Server ID",
+  "settings.server_id.description": "Optional Speedtest server ID. Find IDs with List servers.",
+  "settings.show_provider.label": "Show ISP and IP information",
+  "settings.show_provider.description": "Include the ISP and IP line in full test output.",
+  "settings.save_history.label": "Save test history",
+  "settings.save_history.description": "Append results to the monthly log and history.csv.",
+  "settings.history_dir.label": "History folder",
+  "settings.history_dir.description": "Optional folder. Leave blank to use the script default under Documents/SpeedTest.",
+  "settings.watch_interval.label": "Watch interval (minutes)",
+  "settings.watch_interval.description": "How often the background watch performs a test.",
+  "settings.widget.glyph.label": "Bar icon",
+  "settings.widget.glyph.description": "Choose the icon shown by the SpeedTest bar widget.",
+  "settings.widget.show_label.label": "Show bar label",
+  "settings.widget.show_label.description": "Show or hide the SpeedTest text beside the icon."
+}

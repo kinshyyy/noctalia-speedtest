@@ -1,0 +1,12 @@
+[[plugin]]
+id = "vinicius/speedtest"
+name = "SpeedTest"
+version = "1.0.0"
+author = "vinicius"
+license = "MIT"
+icon = "speedometer"
+description = "Teste a conexão, escolha servidores e consulte o histórico no Noctalia."
+deprecated = false
+plugin_api = 42
+tags = ["network", "utility"]
+dependencies = ["bash"]

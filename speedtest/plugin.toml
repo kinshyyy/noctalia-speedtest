@@ -1,0 +1,80 @@
+id = "vinicius/speedtest"
+name = "SpeedTest"
+version = "1.0.0"
+plugin_api = 42
+author = "Vinicius"
+license = "MIT"
+icon = "speedometer"
+description = "Teste a conexão, escolha servidores e consulte o histórico no Noctalia."
+tags = ["network", "utility"]
+dependencies = ["bash"]
+
+[[setting]]
+key = "server_id"
+type = "string"
+label_key = "settings.server_id.label"
+description_key = "settings.server_id.description"
+default = ""
+
+[[setting]]
+key = "show_provider"
+type = "bool"
+label_key = "settings.show_provider.label"
+description_key = "settings.show_provider.description"
+default = false
+
+[[setting]]
+key = "save_history"
+type = "bool"
+label_key = "settings.save_history.label"
+description_key = "settings.save_history.description"
+default = true
+
+[[setting]]
+key = "history_dir"
+type = "folder"
+label_key = "settings.history_dir.label"
+description_key = "settings.history_dir.description"
+default = ""
+
+[[setting]]
+key = "watch_interval"
+type = "int"
+label_key = "settings.watch_interval.label"
+description_key = "settings.watch_interval.description"
+default = 30
+min = 1
+max = 1440
+
+[[setting]]
+key = "glyph"
+type = "glyph"
+label_key = "settings.widget.glyph.label"
+description_key = "settings.widget.glyph.description"
+default = "activity"
+
+[[setting]]
+key = "show_label"
+type = "bool"
+label_key = "settings.widget.show_label.label"
+description_key = "settings.widget.show_label.description"
+default = true
+
+[[widget]]
+id = "bar"
+entry = "widget.luau"
+
+[[shortcut]]
+id = "open"
+entry = "shortcut.luau"
+
+[[panel]]
+id = "panel"
+entry = "panel.luau"
+width = 430
+height = "content"
+max_height = 720
+
+[[service]]
+id = "watch"
+entry = "service.luau"
