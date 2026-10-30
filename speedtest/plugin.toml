@@ -1,6 +1,6 @@
 id = "kinshyyy/speedtest"
 name = "SpeedTest"
-version = "1.3.12"
+version = "1.3.13"
 plugin_api = 42
 author = "kinshyyy"
 license = "MIT"
@@ -97,6 +97,9 @@ entry = "panel.luau"
 width = 760
 height = "content"
 max_height = 720
+placement = "floating"
+position = "center"
+open_near_click = false
 
 [[service]]
 id = "watch"

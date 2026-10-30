@@ -1,7 +1,7 @@
 [[plugin]]
 id = "kinshyyy/speedtest"
 name = "SpeedTest"
-version = "1.3.12"
+version = "1.3.13"
 author = "kinshyyy"
 license = "MIT"
 icon = "speedometer"
