@@ -420,7 +420,7 @@ function renderPanel()
             }))
         end
     end
-    panel.render(ui.column({ gap = 9, padding = 14, fill = "surface_container" }, children))
+    panel.render(ui.column({ gap = 9, padding = 14, fill = "surface_container", radius = 16 }, children))
 end
 
 function onOpen()
