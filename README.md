@@ -2,7 +2,9 @@
 
 Este repositório distribui o plugin `vinicius/speedtest` para Noctalia v5.4.0 ou mais recente.
 
-Depois que o repositório for publicado, adicione a fonte e habilite o plugin:
+![Painel do SpeedTest no Noctalia](screenshots/speedtest-panel.png)
+
+Adicione a fonte e habilite o plugin:
 
 ```sh
 noctalia msg plugins source add vinicius-speedtest git https://github.com/kinshyyy/noctalia-speedtest.git
