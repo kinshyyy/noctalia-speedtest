@@ -113,7 +113,7 @@ local function writeGauge(kind, value, active, sweep)
         local y = 135 + math.sin(tickAngle) * 86
         table.insert(tickLabels, string.format('<text x="%.1f" y="%.1f" text-anchor="middle" class="tick">%d</text>', x, y, tick.speed))
     end
-    local shownValue = active and "--" or (numeric > 0 and string.format("%.0f", numeric) or "—")
+    local shownValue = numeric > 0 and string.format("%.0f", numeric) or (active and "--" or "—")
     local unitText = "Mbps"
     local svg = string.format([[
 <svg xmlns="http://www.w3.org/2000/svg" width="300" height="210" viewBox="0 0 300 210">
@@ -201,6 +201,13 @@ local function startTestStream(action, label)
 
     local accepted = noctalia.runStream(command, function(line)
         line = cleanOutput(line)
+        local partialDownload = tonumber(string.match(line, "SPEEDTEST_DOWNLOAD|([%d%.]+)"))
+        if partialDownload then
+            metrics.download = tostring(partialDownload)
+            createGauges(animationStage, 0.5)
+            renderPanel()
+            return
+        end
         local phase = string.match(line, "SPEEDTEST_PHASE|([^|]+)")
         if phase then
             if phase == "upload" and animationStage == "download" and animationElapsed < 1200 then

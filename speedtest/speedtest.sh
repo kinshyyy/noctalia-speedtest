@@ -439,9 +439,17 @@ run_speedtest() {
         local plugin_phase=download
         printf 'SPEEDTEST_PHASE|download\n'
         while kill -0 "$pid" 2>/dev/null; do
-            if [[ "$plugin_phase" == download ]] && grep -qE 'Download:|✓ Download' /tmp/speedtest_result.txt 2>/dev/null; then
-                plugin_phase=upload
-                printf 'SPEEDTEST_PHASE|upload\n'
+            if [[ "$plugin_phase" == download ]]; then
+                local partial_download_line partial_download_value
+                partial_download_line=$(grep -E 'Download:|✓ Download' /tmp/speedtest_result.txt 2>/dev/null | head -n1)
+                if [[ -n "$partial_download_line" ]]; then
+                    partial_download_value=$(extract_value "$partial_download_line")
+                    if [[ "$partial_download_value" =~ ^[0-9]+([.][0-9]+)?$ ]]; then
+                        printf 'SPEEDTEST_DOWNLOAD|%s\n' "$partial_download_value"
+                        plugin_phase=upload
+                        printf 'SPEEDTEST_PHASE|upload\n'
+                    fi
+                fi
             fi
             sleep 0.15
         done
