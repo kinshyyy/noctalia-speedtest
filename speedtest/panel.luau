@@ -9,7 +9,7 @@ local outputMode = ""
 local historyGeneration = 0
 local watchEnabled = false
 local watchLabel = "Watch desligado"
-local gaugePath = nil
+local gaugePaths = { download = nil, upload = nil }
 local gaugeSequence = 0
 local gaugeFiles = {}
 local animationStage = nil
@@ -93,38 +93,40 @@ local function speedToRatio(value)
     return 1
 end
 
-local function createGauge(value, mode, sweep)
+local function writeGauge(kind, value, active, sweep)
     local numeric = tonumber(value) or 0
-    local ratio = mode and math.clamp(sweep or 0, 0.02, 0.98) or speedToRatio(numeric)
-    -- 150° é o início inferior esquerdo; 390° é o fim inferior direito.
-    -- Este sentido acompanha exatamente o arco SVG, sem deixar o ponteiro escapar da escala.
+    local ratio = active and math.clamp(sweep or 0, 0.02, 0.98) or speedToRatio(numeric)
+    -- O arco vai de 150° a 390°; o ponteiro usa a mesma escala do mostrador.
     local angle = math.rad(150 + ratio * 240)
-    local needleX = 300 + math.cos(angle) * 150
-    local needleY = 270 + math.sin(angle) * 150
-    local accent = noctalia.getColor("primary") or "#48DCC8"
-    local arcLength = 879.6 -- 210 px de raio × 240 graus, comprimento do arco em unidades SVG.
+    local needleX = 150 + math.cos(angle) * 75
+    local needleY = 135 + math.sin(angle) * 75
+    local accent = kind == "download"
+        and (noctalia.getColor("primary") or "#31C6F4")
+        or (noctalia.getColor("secondary") or "#FFB398")
+    local arcLength = 439.8 -- raio de 105 px × 240 graus.
     local arc = string.format("%.1f %.1f", ratio * arcLength, arcLength)
     local tickLabels = {}
     for _, tick in ipairs(gaugeTicks) do
         local tickAngle = math.rad(150 + tick.ratio * 240)
-        local x = 300 + math.cos(tickAngle) * 174
-        local y = 270 + math.sin(tickAngle) * 174
+        local x = 150 + math.cos(tickAngle) * 86
+        local y = 135 + math.sin(tickAngle) * 86
         table.insert(tickLabels, string.format('<text x="%.1f" y="%.1f" text-anchor="middle" class="tick">%d</text>', x, y, tick.speed))
     end
-    local speedText = mode and string.upper(mode) or (numeric > 0 and string.format("%.0f", numeric) or "GO")
-    local unitText = mode and "MEDINDO" or "Mbps"
+    local shownValue = active and "--" or (numeric > 0 and string.format("%.0f", numeric) or "—")
+    local unitText = "Mbps"
     local svg = string.format([[
-<svg xmlns="http://www.w3.org/2000/svg" width="600" height="430" viewBox="0 0 600 430">
-  <defs><linearGradient id="arc" x1="0" y1="1" x2="1" y2="0"><stop offset="0%%" stop-color="#31C6F4"/><stop offset="100%%" stop-color="%s"/></linearGradient></defs>
-  <path d="M118 375 A210 210 0 1 1 482 375" fill="none" stroke="#343443" stroke-width="27" stroke-linecap="round"/>
-  <path d="M118 375 A210 210 0 1 1 482 375" fill="none" stroke="url(#arc)" stroke-width="27" stroke-linecap="round" stroke-dasharray="%s"/>
+<svg xmlns="http://www.w3.org/2000/svg" width="300" height="210" viewBox="0 0 300 210">
+  <defs><linearGradient id="arc" x1="0" y1="1" x2="1" y2="0"><stop offset="0%%" stop-color="%s"/><stop offset="100%%" stop-color="%s"/></linearGradient></defs>
+  <text x="150" y="17" text-anchor="middle" class="title">%s</text>
+  <path d="M59 187 A105 105 0 1 1 241 187" fill="none" stroke="#343443" stroke-width="13" stroke-linecap="round"/>
+  <path d="M59 187 A105 105 0 1 1 241 187" fill="none" stroke="url(#arc)" stroke-width="13" stroke-linecap="round" stroke-dasharray="%s"/>
   %s
-  <line x1="300" y1="270" x2="%.1f" y2="%.1f" stroke="#F7F4F1" stroke-width="8" stroke-linecap="round"/>
-  <circle cx="300" cy="270" r="15" fill="%s" stroke="#F7F4F1" stroke-width="4"/>
-  <text x="300" y="337" text-anchor="middle" class="speed">%s</text>
-  <text x="300" y="365" text-anchor="middle" class="unit">%s</text>
-  <style>.tick{font:600 16px sans-serif;fill:#aaaab5}.speed{font:500 34px sans-serif;fill:#f7f4f1}.unit{font:14px sans-serif;fill:#aaaab5;letter-spacing:2px}</style>
-</svg>]], accent, arc, table.concat(tickLabels, "\n  "), needleX, needleY, accent, speedText, unitText)
+  <line x1="150" y1="135" x2="%.1f" y2="%.1f" stroke="#F7F4F1" stroke-width="4" stroke-linecap="round"/>
+  <circle cx="150" cy="135" r="7" fill="%s" stroke="#F7F4F1" stroke-width="2"/>
+  <text x="150" y="171" text-anchor="middle" class="speed">%s</text>
+  <text x="150" y="190" text-anchor="middle" class="unit">%s</text>
+  <style>.title{font:600 14px sans-serif;fill:#f7f4f1;letter-spacing:1px}.tick{font:600 10px sans-serif;fill:#aaaab5}.speed{font:500 25px sans-serif;fill:#f7f4f1}.unit{font:13px sans-serif;fill:#aaaab5;letter-spacing:0;text-anchor:middle}</style>
+</svg>]], accent, accent, string.upper(kind), arc, table.concat(tickLabels, "\n  "), needleX, needleY, accent, shownValue, unitText)
 
     local dir = noctalia.pluginDataDir()
     if not dir then return nil end
@@ -132,14 +134,19 @@ local function createGauge(value, mode, sweep)
     local path = dir .. "/speedtest-gauge-" .. tostring(gaugeSequence) .. ".svg"
     local ok = noctalia.writeFile(path, svg)
     if ok then
-        gaugePath = path
+        gaugePaths[kind] = path
         table.insert(gaugeFiles, path)
         if #gaugeFiles > 24 then
             local oldPath = table.remove(gaugeFiles, 1)
             noctalia.removeFile(oldPath)
         end
     end
-    return gaugePath
+    return gaugePaths[kind]
+end
+
+local function createGauges(activeMode, sweep)
+    writeGauge("download", metrics.download, activeMode == "download", sweep)
+    writeGauge("upload", metrics.upload, activeMode == "upload", sweep)
 end
 
 local function configArgs()
@@ -178,7 +185,7 @@ local function startTestStream(action, label)
     noctalia.state.set("output_mode", "")
     metrics = { download = "--", upload = "--", latency = "--", quality = "—" }
     noctalia.state.set("running", true)
-    createGauge(metrics.download, "download", 0.02)
+    createGauges("download", 0.02)
     renderPanel()
     panel.setNeedsFrameTick(true)
 
@@ -208,7 +215,7 @@ local function startTestStream(action, label)
                 metrics = parsed
                 animationStage = nil
                 panel.setNeedsFrameTick(false)
-                createGauge(metrics.download)
+                createGauges()
                 noctalia.state.set("last_metrics", metrics)
                 noctalia.state.set("last_metrics_at", noctalia.nowMs())
                 renderPanel()
@@ -222,7 +229,7 @@ local function startTestStream(action, label)
             noctalia.state.set("running", false)
             if exitCode == 0 and gotResult then
                 statusText = label .. " concluído"
-                createGauge(metrics.download)
+                createGauges()
                 notifyResult(metrics)
             else
                 statusText = exitCode == 0 and "O teste terminou sem fornecer as métricas." or ("Teste falhou (código " .. tostring(exitCode) .. ")")
@@ -299,7 +306,7 @@ local function startAction(action, label, useConfig)
                 metrics = parsed
                 noctalia.state.set("last_metrics", metrics)
                 noctalia.state.set("last_metrics_at", noctalia.nowMs())
-                createGauge(metrics.download)
+                createGauges()
                 if result.exitCode == 0 and not result.timedOut then notifyResult(metrics) end
             else
                 statusText = "Teste terminou, mas não retornou as métricas esperadas"
@@ -389,22 +396,23 @@ function renderPanel()
             revealKey = firstHistoryKey,
         }, historyRows))
     else
-        table.insert(children, ui.row({ gap = 8, align = "center", justify = "center" }, {
+        table.insert(children, ui.row({ gap = 8, paddingH = 70, paddingV = 2, align = "center", justify = "center" }, {
             metricCard("DOWNLOAD", metrics.download, "Mbps", "primary"),
             metricCard("UPLOAD", metrics.upload, "Mbps", "secondary"),
             metricCard("PING", metrics.latency, "ms", "tertiary"),
         }))
-        if gaugePath then
+        if gaugePaths.download and gaugePaths.upload then
             table.insert(children, 2, ui.row({ justify = "center", align = "center", padding = 2 }, {
-                ui.image({ path = gaugePath, width = 320, height = 230, fit = "contain" }),
+                ui.image({ path = gaugePaths.download, width = 320, height = 224, fit = "contain" }),
+                ui.image({ path = gaugePaths.upload, width = 320, height = 224, fit = "contain" }),
             }))
         end
-        table.insert(children, ui.label({ text = "Qualidade da conexão: " .. metrics.quality, fontSize = 12, color = "on_surface_variant" }))
-        table.insert(children, ui.row({ gap = 8 }, {
+        table.insert(children, ui.label({ text = "Qualidade da conexão: " .. metrics.quality, fontSize = 12, color = "on_surface_variant", textAlign = "center" }))
+        table.insert(children, ui.row({ gap = 8, paddingH = 70, paddingV = 2 }, {
             ui.button({ text = "Testar", glyph = "player-play", variant = "primary", flexGrow = 1, enabled = not running, onClick = function() startAction("test", "Teste", true) end }),
             ui.button({ text = "Completo", glyph = "list-details", variant = "secondary", flexGrow = 1, enabled = not running, onClick = function() startAction("test-full", "Teste completo", true) end }),
         }))
-        table.insert(children, ui.label({ text = watchLabel, fontSize = 11, color = watchEnabled and "primary" or "on_surface_variant" }))
+        table.insert(children, ui.label({ text = watchLabel, fontSize = 11, color = watchEnabled and "primary" or "on_surface_variant", textAlign = "center" }))
         if showOutput and outputText ~= "" then
             table.insert(children, ui.separator({ spacing = 3 }))
             table.insert(children, ui.scroll({ height = 116, gap = 4, padding = 8, fill = "surface_container_high", radius = 10 }, {
@@ -430,7 +438,7 @@ function onOpen()
         local parsed = parseResult(outputText)
         if parsed then metrics = parsed end
     end
-    createGauge(metrics.download)
+    createGauges()
     renderPanel()
 end
 
@@ -446,7 +454,7 @@ function onFrameTick(deltaMs)
     if animationFrameElapsed < 160 then return end
     animationFrameElapsed = 0
     local sweep = 0.5 + math.sin(animationElapsed / 850) * 0.46
-    createGauge(metrics.download, animationStage, sweep)
+    createGauges(animationStage, sweep)
     statusText = animationStage == "upload" and "Medindo upload…" or "Medindo download…"
     renderPanel()
 end
@@ -457,7 +465,7 @@ end)
 noctalia.state.watch("last_metrics", function(value)
     if value ~= nil then
         metrics = value
-        createGauge(metrics.download)
+        createGauges()
         renderPanel()
     end
 end)

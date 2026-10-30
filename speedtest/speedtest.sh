@@ -31,6 +31,7 @@ INSTALL_DESKTOP=false
 UNINSTALL_DESKTOP=false
 PAUSE_ON_EXIT=false
 PLUGIN_MODE=false
+SEND_NOTIFICATION=true
 HISTORY_DIR=""
 SPEEDTEST_CMD=""
 
@@ -528,7 +529,9 @@ run_speedtest() {
 
     local clean_quality
     clean_quality=$(echo -e "$QUALITY" | sed 's/\x1B\[[0-9;]*[JKmsu]//g')
-    send_notification "$DOWNLOAD" "$UPLOAD" "$LATENCY" "$clean_quality"
+    if [[ "$SEND_NOTIFICATION" == true ]]; then
+        send_notification "$DOWNLOAD" "$UPLOAD" "$LATENCY" "$clean_quality"
+    fi
     play_sound
 }
 
@@ -602,6 +605,8 @@ while [[ $# -gt 0 ]]; do
             ;;
         --plugin-mode)
             PLUGIN_MODE=true
+            # O plugin controla notificações pela própria configuração.
+            SEND_NOTIFICATION=false
             shift
             ;;
         -h|--help)
