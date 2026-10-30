@@ -385,7 +385,7 @@ function renderPanel()
             ui.label({ text = outputText, fontSize = 11, maxLines = 100 }),
         }))
     end
-    panel.render(ui.scroll({ gap = 9, padding = 14, fill = "surface_container", flexGrow = 1 }, children))
+    panel.render(ui.column({ gap = 9, padding = 14, fill = "surface_container" }, children))
 end
 
 function onOpen()
