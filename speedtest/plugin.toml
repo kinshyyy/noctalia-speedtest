@@ -1,6 +1,6 @@
 id = "vinicius/speedtest"
 name = "SpeedTest"
-version = "1.2.0"
+version = "1.2.1"
 plugin_api = 42
 author = "Vinicius"
 license = "MIT"

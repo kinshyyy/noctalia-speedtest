@@ -326,7 +326,6 @@ local function metricCard(title, value, unit, color)
 end
 
 function renderPanel()
-    if not panelOpen then return end
     watchEnabled = noctalia.state.get("watch_enabled") == true
     watchLabel = tostring(noctalia.state.get("watch_label") or (watchEnabled and "Watch ligado" or "Watch desligado"))
     local children = {
@@ -431,3 +430,7 @@ end)
 noctalia.state.watch("watch_label", function(value)
     if value ~= nil then watchLabel = tostring(value); renderPanel() end
 end)
+
+-- Keep a complete panel tree ready before the first bar click. This avoids a
+-- transient empty shell while Noctalia is opening the panel surface.
+renderPanel()
