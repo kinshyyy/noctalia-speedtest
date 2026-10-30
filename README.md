@@ -3,7 +3,7 @@
 Faça testes de velocidade sem sair do Noctalia. O painel mostra download, upload e latência em um velocímetro animado, com histórico e informações da conexão.
 
 <p align="center">
-  <img src="screenshots/speedtest-panel-1.3.0.png" alt="Painel do plugin SpeedTest no Noctalia" width="600">
+  <img src="screenshots/speedtest-panel-1.3.0-rounded.png" alt="Painel do plugin SpeedTest no Noctalia" width="600">
 </p>
 
 <h2 align="center">Recursos</h2>
