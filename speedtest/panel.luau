@@ -411,6 +411,9 @@ function renderPanel()
             revealKey = firstHistoryKey,
         }, historyRows))
     else
+        local qualityColor = metrics.quality == "Boa" and "#4CAF50"
+            or (metrics.quality == "Regular" and "#FFC107"
+            or (metrics.quality == "Ruim" and "#F44336" or "on_surface_variant"))
         table.insert(children, ui.row({ gap = 8, paddingH = 70, paddingV = 2, align = "center", justify = "center" }, {
             metricCard("DOWNLOAD", metrics.download, "Mbps", "primary"),
             metricCard("UPLOAD", metrics.upload, "Mbps", "secondary"),
@@ -424,7 +427,10 @@ function renderPanel()
         end
         table.insert(children, 3, ui.row({ align = "center", paddingH = 70, paddingV = 2 }, {
             ui.column({ flexGrow = 1, align = "center", paddingH = 16, paddingV = 8, fill = "surface_container_high", radius = 10 }, {
-                ui.label({ text = "Qualidade da conexão: " .. metrics.quality, fontSize = 12, color = "on_surface_variant", textAlign = "center" }),
+                ui.row({ gap = 4, align = "center", justify = "center" }, {
+                    ui.label({ text = "Qualidade da conexão:", fontSize = 12, color = "on_surface_variant" }),
+                    ui.label({ text = metrics.quality, fontSize = 12, color = qualityColor, fontWeight = "bold" }),
+                }),
             }),
         }))
         table.insert(children, ui.row({ gap = 8, paddingH = 70, paddingV = 2 }, {
