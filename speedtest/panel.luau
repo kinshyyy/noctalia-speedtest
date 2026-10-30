@@ -8,7 +8,6 @@ local showOutput = false
 local outputMode = ""
 local historyGeneration = 0
 local watchEnabled = false
-local watchLabel = "Watch desligado"
 local gaugePaths = { download = nil, upload = nil }
 local gaugeSequence = 0
 local gaugeFiles = {}
@@ -366,7 +365,6 @@ end
 
 function renderPanel()
     watchEnabled = noctalia.state.get("watch_enabled") == true
-    watchLabel = tostring(noctalia.state.get("watch_label") or (watchEnabled and "Watch ligado" or "Watch desligado"))
     local historyView = showOutput and outputMode == "stats"
     local children = {
         ui.row({ align = "center", justify = "space_between" }, {
@@ -424,9 +422,8 @@ function renderPanel()
                 ui.image({ path = gaugePaths.upload, width = 320, height = 224, fit = "contain" }),
             }))
         end
-        table.insert(children, ui.row({ justify = "space_between", align = "center", paddingH = 70, paddingV = 2 }, {
+        table.insert(children, ui.row({ align = "center", paddingH = 70, paddingV = 2 }, {
             ui.label({ text = "Qualidade da conexão: " .. metrics.quality, fontSize = 12, color = "on_surface_variant" }),
-            ui.label({ text = watchLabel, fontSize = 11, color = watchEnabled and "primary" or "on_surface_variant", textAlign = "end" }),
         }))
         table.insert(children, ui.row({ gap = 8, paddingH = 70, paddingV = 2 }, {
             ui.button({ text = "Testar", glyph = "player-play", variant = "primary", flexGrow = 1, enabled = not running, onClick = function() startAction("test", "Teste", true) end }),
@@ -496,10 +493,6 @@ end)
 noctalia.state.watch("status", function(value)
     if value ~= nil then statusText = tostring(value); renderPanel() end
 end)
-noctalia.state.watch("watch_label", function(value)
-    if value ~= nil then watchLabel = tostring(value); renderPanel() end
-end)
-
 -- Keep a complete panel tree ready before the first bar click. This avoids a
 -- transient empty shell while Noctalia is opening the panel surface.
 renderPanel()
