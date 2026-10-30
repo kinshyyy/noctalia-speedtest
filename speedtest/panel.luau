@@ -255,7 +255,7 @@ local function startAction(action, label, useConfig)
     noctalia.state.set("running", true)
     statusText = label .. "…"
     outputText = ""
-    showOutput = action == "list" or action == "stats"
+    showOutput = action == "list" or action == "stats" or action == "clean"
     noctalia.state.set("output_visible", showOutput)
     renderPanel()
 
@@ -330,7 +330,11 @@ function renderPanel()
                 ui.label({ text = "SPEEDTEST", fontSize = 21, fontWeight = "bold" }),
                 ui.label({ text = statusText, fontSize = 12, color = "on_surface_variant" }),
             }),
-            ui.button({ glyph = "settings", variant = "ghost", tooltip = "Configurações", onClick = function() noctalia.openSettings() end }),
+            ui.row({ gap = 2, align = "center" }, {
+                ui.button({ glyph = "chart-bar", variant = "ghost", tooltip = "Estatísticas do histórico", enabled = not running, onClick = function() startAction("stats", "Estatísticas", true) end }),
+                ui.button({ glyph = "trash", variant = "ghost", tooltip = "Limpar histórico antigo", enabled = not running, onClick = function() startAction("clean", "Limpeza", true) end }),
+                ui.button({ glyph = "settings", variant = "ghost", tooltip = "Configurações", onClick = function() noctalia.openSettings() end }),
+            }),
         }),
         ui.row({ gap = 8, align = "center", justify = "center" }, {
             metricCard("DOWNLOAD", metrics.download, "Mbps", "primary"),
@@ -358,10 +362,6 @@ function renderPanel()
         ui.button({ text = "Servidores", glyph = "server", flexGrow = 1, enabled = not running, onClick = function() startAction("list", "Lista de servidores", false) end }),
     }))
     table.insert(children, ui.label({ text = watchLabel, fontSize = 11, color = watchEnabled and "primary" or "on_surface_variant" }))
-    table.insert(children, ui.row({ gap = 8 }, {
-        ui.button({ text = "Estatísticas", glyph = "chart-bar", variant = "ghost", flexGrow = 1, enabled = not running, onClick = function() startAction("stats", "Estatísticas", true) end }),
-        ui.button({ text = "Limpar", glyph = "trash", variant = "ghost", flexGrow = 1, enabled = not running, onClick = function() startAction("clean", "Limpeza", true) end }),
-    }))
     if showOutput and outputText ~= "" then
         table.insert(children, ui.separator({ spacing = 3 }))
         table.insert(children, ui.scroll({ height = 116, gap = 4, padding = 8, fill = "surface_container_high", radius = 10 }, {
