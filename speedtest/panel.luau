@@ -341,6 +341,7 @@ end
 function renderPanel()
     watchEnabled = noctalia.state.get("watch_enabled") == true
     watchLabel = tostring(noctalia.state.get("watch_label") or (watchEnabled and "Watch ligado" or "Watch desligado"))
+    local historyView = showOutput and outputMode == "stats"
     local children = {
         ui.row({ align = "center", justify = "space_between" }, {
             ui.column({ gap = 2 }, {
@@ -353,37 +354,45 @@ function renderPanel()
                 ui.button({ glyph = "settings", variant = "ghost", tooltip = "Configurações", onClick = function() noctalia.openSettings() end }),
             }),
         }),
-        ui.row({ gap = 8, align = "center", justify = "center" }, {
+    }
+
+    if historyView then
+        local historyLineCount = math.max(1, #string.split(outputText, "\n"))
+        local historyHeight = math.clamp(historyLineCount * 18 + 24, 110, 450)
+        table.insert(children, ui.scroll({ height = historyHeight, gap = 4, padding = 10, fill = "surface_container_high", radius = 10 }, {
+            ui.label({ text = outputText ~= "" and outputText or statusText, fontSize = 11, maxLines = 200 }),
+        }))
+    else
+        table.insert(children, ui.row({ gap = 8, align = "center", justify = "center" }, {
             metricCard("DOWNLOAD", metrics.download, "Mbps", "primary"),
             metricCard("UPLOAD", metrics.upload, "Mbps", "secondary"),
             metricCard("PING", metrics.latency, "ms", "tertiary"),
-        }),
-    }
-
-    if gaugePath then
-        table.insert(children, 2, ui.row({ justify = "center", align = "center", padding = 2 }, {
-            ui.image({ path = gaugePath, width = 320, height = 230, fit = "contain" }),
         }))
-    end
-    table.insert(children, ui.label({ text = "Qualidade da conexão: " .. metrics.quality, fontSize = 12, color = "on_surface_variant" }))
-    table.insert(children, ui.row({ gap = 8 }, {
-        ui.button({ text = "Testar", glyph = "player-play", variant = "primary", flexGrow = 1, enabled = not running, onClick = function() startAction("test", "Teste", true) end }),
-        ui.button({ text = "Completo", glyph = "list-details", variant = "secondary", flexGrow = 1, enabled = not running, onClick = function() startAction("test-full", "Teste completo", true) end }),
-    }))
-    table.insert(children, ui.row({ gap = 8 }, {
-        ui.button({ text = watchEnabled and "Parar watch" or "Iniciar watch", glyph = watchEnabled and "player-stop" or "repeat", variant = watchEnabled and "destructive" or "outline", flexGrow = 1, onClick = function()
-            noctalia.state.set("watch_enabled", not watchEnabled)
-            watchEnabled = not watchEnabled
-            renderPanel()
-        end }),
-        ui.button({ text = "Servidores", glyph = "server", flexGrow = 1, enabled = not running, onClick = function() startAction("list", "Lista de servidores", false) end }),
-    }))
-    table.insert(children, ui.label({ text = watchLabel, fontSize = 11, color = watchEnabled and "primary" or "on_surface_variant" }))
-    if showOutput and outputText ~= "" then
-        table.insert(children, ui.separator({ spacing = 3 }))
-        table.insert(children, ui.scroll({ height = 116, gap = 4, padding = 8, fill = "surface_container_high", radius = 10 }, {
-            ui.label({ text = outputText, fontSize = 11, maxLines = 100 }),
+        if gaugePath then
+            table.insert(children, 2, ui.row({ justify = "center", align = "center", padding = 2 }, {
+                ui.image({ path = gaugePath, width = 320, height = 230, fit = "contain" }),
+            }))
+        end
+        table.insert(children, ui.label({ text = "Qualidade da conexão: " .. metrics.quality, fontSize = 12, color = "on_surface_variant" }))
+        table.insert(children, ui.row({ gap = 8 }, {
+            ui.button({ text = "Testar", glyph = "player-play", variant = "primary", flexGrow = 1, enabled = not running, onClick = function() startAction("test", "Teste", true) end }),
+            ui.button({ text = "Completo", glyph = "list-details", variant = "secondary", flexGrow = 1, enabled = not running, onClick = function() startAction("test-full", "Teste completo", true) end }),
         }))
+        table.insert(children, ui.row({ gap = 8 }, {
+            ui.button({ text = watchEnabled and "Parar watch" or "Iniciar watch", glyph = watchEnabled and "player-stop" or "repeat", variant = watchEnabled and "destructive" or "outline", flexGrow = 1, onClick = function()
+                noctalia.state.set("watch_enabled", not watchEnabled)
+                watchEnabled = not watchEnabled
+                renderPanel()
+            end }),
+            ui.button({ text = "Servidores", glyph = "server", flexGrow = 1, enabled = not running, onClick = function() startAction("list", "Lista de servidores", false) end }),
+        }))
+        table.insert(children, ui.label({ text = watchLabel, fontSize = 11, color = watchEnabled and "primary" or "on_surface_variant" }))
+        if showOutput and outputText ~= "" then
+            table.insert(children, ui.separator({ spacing = 3 }))
+            table.insert(children, ui.scroll({ height = 116, gap = 4, padding = 8, fill = "surface_container_high", radius = 10 }, {
+                ui.label({ text = outputText, fontSize = 11, maxLines = 100 }),
+            }))
+        end
     end
     panel.render(ui.column({ gap = 9, padding = 14, fill = "surface_container" }, children))
 end
