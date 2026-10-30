@@ -5,6 +5,7 @@ local panelOpen = false
 local statusText = "Pronto para testar"
 local outputText = ""
 local showOutput = false
+local outputMode = ""
 local watchEnabled = false
 local watchLabel = "Watch desligado"
 local gaugePath = nil
@@ -171,7 +172,9 @@ local function startTestStream(action, label)
     statusText = "Medindo download…"
     outputText = ""
     showOutput = false
+    outputMode = ""
     noctalia.state.set("output_visible", false)
+    noctalia.state.set("output_mode", "")
     metrics = { download = "--", upload = "--", latency = "--", quality = "—" }
     noctalia.state.set("running", true)
     createGauge(metrics.download, "download", 0.02)
@@ -256,7 +259,9 @@ local function startAction(action, label, useConfig)
     statusText = label .. "…"
     outputText = ""
     showOutput = action == "list" or action == "stats" or action == "clean"
+    outputMode = showOutput and action or ""
     noctalia.state.set("output_visible", showOutput)
+    noctalia.state.set("output_mode", outputMode)
     renderPanel()
 
     local argv = { "bash", scriptPath(), "--plugin-mode" }
@@ -311,6 +316,18 @@ local function startAction(action, label, useConfig)
     end
 end
 
+local function toggleHistory()
+    if showOutput and outputMode == "stats" then
+        showOutput = false
+        outputMode = ""
+        noctalia.state.set("output_visible", false)
+        noctalia.state.set("output_mode", "")
+        renderPanel()
+        return
+    end
+    startAction("stats", "Estatísticas", true)
+end
+
 local function metricCard(title, value, unit, color)
     local numeric = tonumber(value)
     local displayValue = numeric and string.format("%.0f", numeric) or tostring(value)
@@ -331,7 +348,7 @@ function renderPanel()
                 ui.label({ text = statusText, fontSize = 12, color = "on_surface_variant" }),
             }),
             ui.row({ gap = 2, align = "center" }, {
-                ui.button({ glyph = "chart-bar", variant = "ghost", tooltip = "Estatísticas do histórico", enabled = not running, onClick = function() startAction("stats", "Estatísticas", true) end }),
+                ui.button({ glyph = "chart-bar", variant = "ghost", tooltip = "Mostrar/ocultar estatísticas do histórico", enabled = not running, onClick = toggleHistory }),
                 ui.button({ glyph = "trash", variant = "ghost", tooltip = "Limpar histórico antigo", enabled = not running, onClick = function() startAction("clean", "Limpeza", true) end }),
                 ui.button({ glyph = "settings", variant = "ghost", tooltip = "Configurações", onClick = function() noctalia.openSettings() end }),
             }),
@@ -375,6 +392,7 @@ function onOpen()
     panelOpen = true
     outputText = tostring(noctalia.state.get("last_output") or "")
     showOutput = noctalia.state.get("output_visible") == true
+    outputMode = tostring(noctalia.state.get("output_mode") or "")
     statusText = tostring(noctalia.state.get("status") or "Pronto para testar")
     watchEnabled = noctalia.state.get("watch_enabled") == true
     local savedMetrics = noctalia.state.get("last_metrics")
