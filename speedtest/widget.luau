@@ -16,7 +16,9 @@ local function captureLatestResult()
     if updatedAt <= 0 or updatedAt == seenMetricsAt then return end
     seenMetricsAt = updatedAt
 
-    if noctalia.getConfig("show_result_on_bar") ~= true then return end
+    -- The temporary result has its own toggle; it must work even when the
+    -- persistent label is disabled or the setting has not been saved yet.
+    if noctalia.getConfig("show_result_on_bar") == false then return end
     local metrics = noctalia.state.get("last_metrics")
     if type(metrics) ~= "table" then return end
 
@@ -42,7 +44,7 @@ function update()
 
     captureLatestResult()
     local now = noctalia.nowMs()
-    local showResult = noctalia.getConfig("show_result_on_bar") == true
+    local showResult = noctalia.getConfig("show_result_on_bar") ~= false
     local text
     local tooltip
     if showResult and activeResult and now < resultExpiresAt then

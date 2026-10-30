@@ -48,7 +48,7 @@ Em **Configurações → Plugins → SpeedTest**, você pode ajustar:
 | Intervalo do watch | Define a frequência dos testes automáticos, em minutos. |
 | Ícone da barra | Escolhe o ícone do widget. |
 | Mostrar rótulo | Exibe ou oculta o texto ao lado do ícone. |
-| Mostrar resultado temporário | Exibe download e upload na barra ao concluir um teste. |
+| Mostrar resultado temporário | Exibe download e upload na barra ao concluir um teste, mesmo com o rótulo oculto. |
 | Duração do resultado | Define por quantos segundos o resumo fica na barra (1–120 s). |
 
 <h2 align="center">Motor de teste</h2>
