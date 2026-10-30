@@ -353,6 +353,12 @@ function renderPanel()
             ui.row({ gap = 2, align = "center" }, {
                 ui.button({ glyph = "chart-bar", variant = "ghost", tooltip = "Mostrar/ocultar estatísticas do histórico", enabled = not running, onClick = toggleHistory }),
                 ui.button({ glyph = "trash", variant = "ghost", tooltip = "Limpar histórico antigo", enabled = not running, onClick = function() startAction("clean", "Limpeza", true) end }),
+                ui.button({ glyph = watchEnabled and "player-stop" or "repeat", variant = "ghost", tooltip = watchEnabled and "Parar watch" or "Iniciar watch", onClick = function()
+                    noctalia.state.set("watch_enabled", not watchEnabled)
+                    watchEnabled = not watchEnabled
+                    renderPanel()
+                end }),
+                ui.button({ glyph = "server", variant = "ghost", tooltip = "Listar servidores", enabled = not running, onClick = function() startAction("list", "Lista de servidores", false) end }),
                 ui.button({ glyph = "settings", variant = "ghost", tooltip = "Configurações", onClick = function() noctalia.openSettings() end }),
             }),
         }),
@@ -397,14 +403,6 @@ function renderPanel()
         table.insert(children, ui.row({ gap = 8 }, {
             ui.button({ text = "Testar", glyph = "player-play", variant = "primary", flexGrow = 1, enabled = not running, onClick = function() startAction("test", "Teste", true) end }),
             ui.button({ text = "Completo", glyph = "list-details", variant = "secondary", flexGrow = 1, enabled = not running, onClick = function() startAction("test-full", "Teste completo", true) end }),
-        }))
-        table.insert(children, ui.row({ gap = 8 }, {
-            ui.button({ text = watchEnabled and "Parar watch" or "Iniciar watch", glyph = watchEnabled and "player-stop" or "repeat", variant = watchEnabled and "destructive" or "outline", flexGrow = 1, onClick = function()
-                noctalia.state.set("watch_enabled", not watchEnabled)
-                watchEnabled = not watchEnabled
-                renderPanel()
-            end }),
-            ui.button({ text = "Servidores", glyph = "server", flexGrow = 1, enabled = not running, onClick = function() startAction("list", "Lista de servidores", false) end }),
         }))
         table.insert(children, ui.label({ text = watchLabel, fontSize = 11, color = watchEnabled and "primary" or "on_surface_variant" }))
         if showOutput and outputText ~= "" then
