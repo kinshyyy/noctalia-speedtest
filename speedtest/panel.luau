@@ -6,6 +6,7 @@ local statusText = "Pronto para testar"
 local outputText = ""
 local showOutput = false
 local outputMode = ""
+local historyGeneration = 0
 local watchEnabled = false
 local watchLabel = "Watch desligado"
 local gaugePath = nil
@@ -260,6 +261,7 @@ local function startAction(action, label, useConfig)
     outputText = ""
     showOutput = action == "list" or action == "stats" or action == "clean"
     outputMode = showOutput and action or ""
+    if action == "stats" then historyGeneration += 1 end
     noctalia.state.set("output_visible", showOutput)
     noctalia.state.set("output_mode", outputMode)
     renderPanel()
@@ -357,11 +359,29 @@ function renderPanel()
     }
 
     if historyView then
-        local historyLineCount = math.max(1, #string.split(outputText, "\n"))
+        local historyContent = outputText ~= "" and outputText or statusText
+        local historyLines = string.split(historyContent, "\n")
+        local historyLineCount = math.max(1, #historyLines)
         local historyHeight = math.clamp(historyLineCount * 18 + 24, 110, 450)
-        table.insert(children, ui.scroll({ height = historyHeight, gap = 4, padding = 10, fill = "surface_container_high", radius = 10 }, {
-            ui.label({ text = outputText ~= "" and outputText or statusText, fontSize = 11, maxLines = 200 }),
-        }))
+        local historyRows = {}
+        local firstHistoryKey = "history-line-" .. tostring(historyGeneration) .. "-1"
+        for index, line in ipairs(historyLines) do
+            table.insert(historyRows, ui.label({
+                key = "history-line-" .. tostring(historyGeneration) .. "-" .. tostring(index),
+                text = line ~= "" and line or " ",
+                fontSize = 11,
+                maxLines = 1,
+            }))
+        end
+        table.insert(children, ui.scroll({
+            key = "history-scroll-" .. tostring(historyGeneration),
+            height = historyHeight,
+            gap = 2,
+            padding = 10,
+            fill = "surface_container_high",
+            radius = 10,
+            revealKey = firstHistoryKey,
+        }, historyRows))
     else
         table.insert(children, ui.row({ gap = 8, align = "center", justify = "center" }, {
             metricCard("DOWNLOAD", metrics.download, "Mbps", "primary"),
@@ -402,6 +422,7 @@ function onOpen()
     outputText = tostring(noctalia.state.get("last_output") or "")
     showOutput = noctalia.state.get("output_visible") == true
     outputMode = tostring(noctalia.state.get("output_mode") or "")
+    if outputMode == "stats" then historyGeneration += 1 end
     statusText = tostring(noctalia.state.get("status") or "Pronto para testar")
     watchEnabled = noctalia.state.get("watch_enabled") == true
     local savedMetrics = noctalia.state.get("last_metrics")
